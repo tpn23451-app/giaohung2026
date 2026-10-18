@@ -656,6 +656,9 @@ function createTeacherDashboardModal() {
         </div>
 
         <div class="flex items-center gap-2">
+          <button type="button" onclick="window.openExamMatrixModal()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-xs font-bold text-white shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer" title="Soạn đề thi theo ma trận chuẩn Bộ GD&ĐT">
+            🎯 Soạn Đề Ma Trận
+          </button>
           <button type="button" id="refresh-teacher-data-btn" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-xs font-bold text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer">
             🔄 Làm mới
           </button>
@@ -1053,6 +1056,17 @@ function injectMultiSubjectHub() {
         >
           <span>⭐</span>
           <span>Đề 5-8-9</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="window.openExamMatrixModal()" 
+          id="hub-btn-matrix"
+          class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs shadow-md shadow-orange-500/25 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer animate-pulse"
+          title="Tạo Đề Thi Chuẩn Ma Trận GDPT 2018 (4 Mức Độ Nhận Thức) & Xuất Bản In / PDF"
+        >
+          <span>🎯</span>
+          <span>Tạo Đề Ma Trận</span>
         </button>
 
         <div class="h-6 w-px bg-indigo-500/30 hidden sm:block mx-1"></div>

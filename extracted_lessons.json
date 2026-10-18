@@ -1,5 +1,104 @@
 [
   {
+    "id": "toan-ltdh-k6",
+    "subject": "Môn TOÁN",
+    "grade": "Khối 6",
+    "gradeNumber": 6,
+    "title": "📐 TOÁN 6: Số học, Phân số, Số thập phân & Hình học trực quan",
+    "description": "Tập hợp số tự nhiên, tính chất chia hết, số nguyên, phân số, số thập phân và các hình phẳng trực quan (tam giác đều, hình vuông, lục giác đều, hình thoi).",
+    "iconName": "Calculator",
+    "color": "from-blue-600 to-indigo-700",
+    "isSpecialExam": true
+  },
+  {
+    "id": "toan-ltdh-k7",
+    "subject": "Môn TOÁN",
+    "grade": "Khối 7",
+    "gradeNumber": 7,
+    "title": "📐 TOÁN 7: Số hữu tỉ, Số thực, Đa thức & Tam giác bằng nhau",
+    "description": "Cộng trừ nhân chia số hữu tỉ, căn bậc hai số học, đơn thức - đa thức một biến, các trường hợp bằng nhau của tam giác và định lý Pythagore.",
+    "iconName": "Calculator",
+    "color": "from-blue-600 to-indigo-700",
+    "isSpecialExam": true
+  },
+  {
+    "id": "toan-vao-10",
+    "subject": "Môn TOÁN",
+    "grade": "Luyện thi vào 10",
+    "gradeNumber": 9,
+    "title": "⭐ TOÁN TUYỂN SINH VÀO 10: Rút gọn biểu thức, Hệ phương trình, Vi-ét & Hình học đường tròn",
+    "description": "Bộ đề tổng hợp cấu trúc thi vào 10 chính thức: Rút gọn căn thức, giải bài toán bằng cách lập hệ phương trình, định lý Vi-ét tìm m, tiếp tuyến đường tròn và cực trị đại số.",
+    "iconName": "Award",
+    "color": "from-amber-500 to-rose-600",
+    "isSpecialExam": true
+  },
+  {
+    "id": "li-ltdh-k6",
+    "subject": "Môn LÍ",
+    "grade": "Khối 6",
+    "gradeNumber": 6,
+    "title": "⚡ KHTN 6 (VẬT LÍ): Lực, Khối lượng, Trọng lượng & Đo lường",
+    "description": "Đơn vị đo độ dài, khối lượng, thời gian, nhiệt độ; lực tiếp xúc và không tiếp xúc, lực ma sát, lực cản và năng lượng trong đời sống.",
+    "iconName": "Zap",
+    "color": "from-amber-500 to-orange-600",
+    "isSpecialExam": true
+  },
+  {
+    "id": "li-ltdh-k7",
+    "subject": "Môn LÍ",
+    "grade": "Khối 7",
+    "gradeNumber": 7,
+    "title": "⚡ KHTN 7 (VẬT LÍ): Tốc độ chuyển động, Âm thanh & Ánh sáng",
+    "description": "Đo tốc độ, đồ thị quãng đường - thời gian, sóng âm, độ to - độ cao của âm thanh, định luật phản xạ ánh sáng và ảnh tạo bởi gương phẳng.",
+    "iconName": "Zap",
+    "color": "from-amber-500 to-orange-600",
+    "isSpecialExam": true
+  },
+  {
+    "id": "khtn-vao-10",
+    "subject": "Môn LÍ",
+    "grade": "Luyện thi vào 10",
+    "gradeNumber": 9,
+    "title": "⭐ KHTN VÀO 10: Tổng hợp Vật Lí (Điện - Quang) & Hóa Học (Vô cơ - Hữu cơ)",
+    "description": "Đề thi thử môn KHTN / Lí - Hóa tổng hợp vào 10: Định luật Ôm, máy biến thế, khúc xạ ánh sáng, phân loại hợp chất vô cơ, bài toán kim loại và hidrocacbon.",
+    "iconName": "Sparkles",
+    "color": "from-emerald-600 to-cyan-700",
+    "isSpecialExam": true
+  },
+  {
+    "id": "anh-ltdh-k6",
+    "subject": "Môn ANH",
+    "grade": "Khối 6",
+    "gradeNumber": 6,
+    "title": "🇬🇧 TIẾNG ANH 6: Hiện tại đơn, Hiện tại tiếp diễn & Từ vựng căn bản",
+    "description": "Ngữ pháp cốt lõi lớp 6: Present Simple vs Present Continuous, giới từ chỉ nơi chốn, đại từ sở hữu, danh từ đếm được và không đếm được.",
+    "iconName": "Globe2",
+    "color": "from-purple-600 to-indigo-800",
+    "isSpecialExam": true
+  },
+  {
+    "id": "anh-ltdh-k7",
+    "subject": "Môn ANH",
+    "grade": "Khối 7",
+    "gradeNumber": 7,
+    "title": "🇬🇧 TIẾNG ANH 7: Quá khứ đơn, Tương lai đơn, So sánh & Cụm từ chỉ số lượng",
+    "description": "Past Simple, Future Simple, cấu trúc 'used to', so sánh bằng 'as...as' và khác biệt 'different from', much/many/a lot of.",
+    "iconName": "Globe2",
+    "color": "from-purple-600 to-indigo-800",
+    "isSpecialExam": true
+  },
+  {
+    "id": "anh-vao-10",
+    "subject": "Môn ANH",
+    "grade": "Luyện thi vào 10",
+    "gradeNumber": 9,
+    "title": "⭐ TIẾNG ANH TUYỂN SINH VÀO 10: Ngữ âm, Trọng âm, Ngữ pháp tổng hợp & Đọc hiểu",
+    "description": "Bộ đề thi thử môn Tiếng Anh vào lớp 10 theo form chuẩn: Phát âm đuôi -ed/-s, trọng âm 2-3 âm tiết, câu gián tiếp, câu điều kiện, bị động, mệnh đề quan hệ và bài đọc hiểu điền từ.",
+    "iconName": "Award",
+    "color": "from-purple-600 to-pink-600",
+    "isSpecialExam": true
+  },
+  {
     "id": "toan-ltdh-k8",
     "subject": "Môn TOÁN",
     "grade": "Khối 8",
