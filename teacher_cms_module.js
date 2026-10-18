@@ -314,14 +314,34 @@ export function createTeacherCmsModal() {
               </select>
             </div>
 
-            <button 
-              type="button" 
-              id="cms-refresh-list-btn"
-              class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
-            >
-              <span>🔄</span>
-              <span>Làm mới danh sách</span>
-            </button>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button 
+                type="button" 
+                onclick="window.exportCustomQuestionsJson()"
+                class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 transition-all cursor-pointer flex items-center gap-1"
+                title="Tải toàn bộ ngân hàng câu hỏi về máy tính dưới dạng file JSON"
+              >
+                <span>📥</span>
+                <span>Sao Lưu (Backup JSON)</span>
+              </button>
+              <label 
+                class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold border border-indigo-200 transition-all cursor-pointer flex items-center gap-1"
+                title="Nạp ngân hàng câu hỏi từ file JSON có sẵn trên máy tính"
+              >
+                <span>📤</span>
+                <span>Nạp Từ JSON</span>
+                <input type="file" id="cms-import-json-file" accept=".json" class="hidden" onchange="window.importCustomQuestionsJson(event)" />
+              </label>
+              <button 
+                type="button" 
+                id="cms-refresh-list-btn"
+                onclick="loadCustomQuestionsFromFirebase()"
+                class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+              >
+                <span>🔄</span>
+                <span>Làm mới</span>
+              </button>
+            </div>
           </div>
 
           <div id="cms-custom-questions-table" class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
@@ -830,7 +850,55 @@ window.startExamFromCustom = async function (examKey) {
   }
 };
 
-// 8. Đóng / Mở Modal CMS
+// 8. Xuất & Nhập Ngân Hàng Câu Hỏi JSON (Backup & Restore)
+window.exportCustomQuestionsJson = async function () {
+  try {
+    const res = await fetch(`${FIREBASE_DB_URL}/custom_questions.json`);
+    const data = await res.json();
+    if (!data) {
+      alert("Chưa có bộ đề nào để xuất sao lưu!");
+      return;
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ngan_hang_de_giao_hung_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("Đã tải xuống file sao lưu JSON thành công!", "success");
+  } catch (e) {
+    showToast("Lỗi khi tải file sao lưu!", "error");
+  }
+};
+
+window.importCustomQuestionsJson = function (event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const json = JSON.parse(e.target.result);
+      if (typeof json !== "object") throw new Error("File không đúng cấu trúc JSON");
+
+      // Cập nhật lên Firebase
+      await fetch(`${FIREBASE_DB_URL}/custom_questions.json`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(json)
+      });
+
+      showToast("Đã phục hồi dữ liệu từ file JSON lên Firebase thành công!", "success");
+      loadCustomQuestionsFromFirebase();
+    } catch (err) {
+      alert("Lỗi khi đọc file JSON: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+};
+
+// 9. Đóng / Mở Modal CMS
 window.openTeacherCmsModal = function () {
   createTeacherCmsModal();
   const modal = document.getElementById("teacher-cms-modal");

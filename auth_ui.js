@@ -166,7 +166,16 @@ window.autoSaveExamToFirebase = async function (profile, session, correctCount, 
     showToast(`☁️ Đã lưu điểm thi (${payload.score}/10) lên Firebase!`, "success");
   } catch (err) {
     console.error("❌ Lỗi khi tự động lưu điểm thi lên Firebase:", err);
-    showToast("⚠️ Không thể lưu điểm lên Firebase (vui lòng kiểm tra mạng)!", "error");
+    // Lưu tạm vào hàng đợi ngoại tuyến LocalStorage
+    try {
+      const offlineQueue = JSON.parse(localStorage.getItem("giao_hung_offline_exam_queue") || "[]");
+      offlineQueue.push(payload);
+      localStorage.setItem("giao_hung_offline_exam_queue", JSON.stringify(offlineQueue));
+      displayResultCloudBanner(payload, "OFFLINE-" + Date.now().toString().slice(-4));
+      showToast("🟠 Đã lưu tạm vào máy (sẽ tự động đồng bộ khi có mạng)!", "info");
+    } catch (e) {
+      showToast("⚠️ Không thể lưu điểm lên Firebase!", "error");
+    }
   }
 };
 
@@ -1108,6 +1117,17 @@ function injectMultiSubjectHub() {
           <span>Bảng Vàng</span>
         </button>
 
+        <!-- Nút Bật / Tắt Âm Thanh -->
+        <button 
+          type="button" 
+          onclick="window.toggleSoundEffects()" 
+          id="hub-btn-sound"
+          class="px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-amber-300 font-bold text-xs shadow-xs transition-all flex items-center gap-1 shrink-0 cursor-pointer"
+          title="Bật / Tắt âm thanh hiệu ứng và nhạc vinh danh"
+        >
+          <span id="hub-sound-icon">🔊</span>
+        </button>
+
         <div class="h-6 w-px bg-indigo-500/30 hidden sm:block mx-1"></div>
 
         <!-- Khu vực tài khoản / Đăng nhập học sinh & GV -->
@@ -1228,6 +1248,15 @@ function initAuth() {
     }, 1800);
   }
 }
+
+window.toggleSoundEffects = function() {
+  if (window.soundManager) {
+    const isMuted = window.soundManager.toggleMute();
+    const icon = document.getElementById("hub-sound-icon");
+    if (icon) icon.textContent = isMuted ? "🔇" : "🔊";
+    showToast(isMuted ? "🔇 Đã tắt âm thanh hiệu ứng" : "🔊 Đã bật âm thanh hiệu ứng", "info");
+  }
+};
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initAuth);

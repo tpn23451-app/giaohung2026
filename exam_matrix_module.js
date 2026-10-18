@@ -950,6 +950,7 @@ function startInteractiveOnlineExam(examData, lessonId) {
     // Gắn sự kiện chọn đáp án
     container.querySelectorAll(".exam-option-card").forEach(btn => {
       btn.addEventListener("click", () => {
+        if (window.soundManager) window.soundManager.playClick();
         const optIdx = parseInt(btn.getAttribute("data-opt-index"), 10);
         userAnswers[currentIndex] = optIdx;
         renderCurrentView();
@@ -1058,6 +1059,14 @@ function displayExamResults(examData, userAnswers, score, correctCount, containe
   const letters = ["A", "B", "C", "D"];
   const total = examData.totalQuestions;
 
+  // Hiệu ứng âm thanh & Pháo hoa chúc mừng
+  if (score >= 8.0) {
+    if (window.soundManager) window.soundManager.playFanfare();
+    if (window.triggerConfetti) window.triggerConfetti(4500);
+  } else {
+    if (window.soundManager) window.soundManager.playCorrect();
+  }
+
   container.innerHTML = `
     <div class="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-50 flex items-center justify-center">
       <div class="max-w-3xl w-full my-6 bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-slate-200 text-center space-y-6">
@@ -1123,6 +1132,17 @@ function displayExamResults(examData, userAnswers, score, correctCount, containe
 
         <!-- Nút hành động -->
         <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+          ${score >= 8.0 ? `
+            <button 
+              type="button" 
+              id="btn-print-honor-certificate"
+              class="px-5 py-3 rounded-2xl bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/30 transition-all cursor-pointer flex items-center gap-1.5 animate-bounce"
+            >
+              <span>📜</span>
+              <span>In Giấy Khen Danh Dự (A4 Ngang)</span>
+            </button>
+          ` : ''}
+
           <button 
             type="button" 
             onclick="window.openLeaderboardModal()"
@@ -1149,6 +1169,17 @@ function displayExamResults(examData, userAnswers, score, correctCount, containe
       </div>
     </div>
   `;
+
+  // Gắn sự kiện in Giấy Khen Danh Dự
+  const certBtn = container.querySelector("#btn-print-honor-certificate");
+  if (certBtn) {
+    certBtn.onclick = () => {
+      const student = JSON.parse(localStorage.getItem("ontap_logged_student") || "null");
+      if (window.openCertificateModal) {
+        window.openCertificateModal(student, examData, score);
+      }
+    };
+  }
 
   // Nhúng phân tích năng lực nhận thức
   const slot = container.querySelector("#cognitive-analytics-slot");
