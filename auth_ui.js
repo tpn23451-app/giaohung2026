@@ -655,9 +655,15 @@ function createTeacherDashboardModal() {
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="window.openTeacherCmsModal()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer" title="Soạn câu hỏi mới & nhập tự động từ Word / PDF">
+            ✍️ Soạn Câu Hỏi CMS
+          </button>
           <button type="button" onclick="window.openExamMatrixModal()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-xs font-bold text-white shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer" title="Soạn đề thi theo ma trận chuẩn Bộ GD&ĐT">
             🎯 Soạn Đề Ma Trận
+          </button>
+          <button type="button" onclick="window.openLeaderboardModal()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-xs font-black text-slate-950 shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer" title="Xem Bảng Vàng vinh danh">
+            🏆 Bảng Vàng Top 10
           </button>
           <button type="button" id="refresh-teacher-data-btn" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-xs font-bold text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer">
             🔄 Làm mới
@@ -1067,6 +1073,39 @@ function injectMultiSubjectHub() {
         >
           <span>🎯</span>
           <span>Tạo Đề Ma Trận</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="window.openTeacherCmsModal()" 
+          id="hub-btn-cms"
+          class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-black text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+          title="Soạn Câu Hỏi Mới & Nhập Đề Nhanh Từ Word / PDF (Teacher CMS)"
+        >
+          <span>✍️</span>
+          <span>Soạn Câu Hỏi CMS</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="window.openMockExamsModal()" 
+          id="hub-btn-mock10"
+          class="px-3 py-1.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 active:scale-95 text-white font-black text-xs shadow-md transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+          title="Bộ Đề Thi Thử Chuẩn Cấu Trúc Tuyển Sinh Vào 10 (Toán, KHTN, Anh)"
+        >
+          <span>🎓</span>
+          <span>Đề Vào 10</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="window.openLeaderboardModal()" 
+          id="hub-btn-leaderboard"
+          class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 active:scale-95 text-slate-950 font-black text-xs shadow-md shadow-amber-500/25 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+          title="Vinh Danh Top 10 Học Sinh Xuất Sắc Nhất"
+        >
+          <span>🏆</span>
+          <span>Bảng Vàng</span>
         </button>
 
         <div class="h-6 w-px bg-indigo-500/30 hidden sm:block mx-1"></div>

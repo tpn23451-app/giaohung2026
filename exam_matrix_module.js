@@ -1093,6 +1093,9 @@ function displayExamResults(examData, userAnswers, score, correctCount, containe
           </div>
         </div>
 
+        <!-- Khung Phân Tích Năng Lực & Chẩn Đoán Lỗ Hổng Kiến Thức (AI Analytics & Smart Retry) -->
+        <div id="cognitive-analytics-slot"></div>
+
         <!-- Bảng xem lại chi tiết từng câu -->
         <div class="text-left space-y-3 pt-4 border-t border-slate-200">
           <h4 class="font-extrabold text-sm sm:text-base text-slate-900">
@@ -1122,6 +1125,14 @@ function displayExamResults(examData, userAnswers, score, correctCount, containe
         <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
           <button 
             type="button" 
+            onclick="window.openLeaderboardModal()"
+            class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <span>🏆</span>
+            <span>Xem Bảng Vàng Vinh Danh</span>
+          </button>
+          <button 
+            type="button" 
             onclick="window.openPrintPreviewModal(${JSON.stringify(examData).replace(/"/g, '&quot;')})"
             class="px-5 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-black text-xs sm:text-sm border-2 border-slate-300 shadow-2xs transition-all cursor-pointer"
           >
@@ -1138,6 +1149,13 @@ function displayExamResults(examData, userAnswers, score, correctCount, containe
       </div>
     </div>
   `;
+
+  // Nhúng phân tích năng lực nhận thức
+  const slot = container.querySelector("#cognitive-analytics-slot");
+  if (slot && window.renderCognitiveGapAnalytics) {
+    const analyticsEl = window.renderCognitiveGapAnalytics(examData, userAnswers);
+    slot.appendChild(analyticsEl);
+  }
 
   if (window.renderKatex) {
     container.querySelectorAll(".math-rendered-box").forEach(el => window.renderKatex(el));
