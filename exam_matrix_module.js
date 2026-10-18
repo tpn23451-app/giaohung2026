@@ -302,14 +302,14 @@ export function createExamMatrixModal() {
           </div>
 
           <!-- Các nút Preset nhanh -->
-          <div class="flex flex-wrap gap-1.5 mb-3">
-            <button type="button" onclick="window.applyMatrixPreset(40, 30, 20, 10)" class="px-2.5 py-1 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-900 font-bold text-xs transition-colors">
+          <div class="flex flex-wrap gap-1.5 mb-3" id="matrix-preset-container">
+            <button type="button" onclick="window.applyMatrixPreset(40, 30, 20, 10, this)" class="matrix-preset-btn px-3 py-1.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-black text-xs shadow-xs transition-all cursor-pointer">
               📌 Chuẩn Giữa kì / Cuối kì (40 - 30 - 20 - 10)
             </button>
-            <button type="button" onclick="window.applyMatrixPreset(50, 40, 10, 0)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors">
+            <button type="button" onclick="window.applyMatrixPreset(50, 40, 10, 0, this)" class="matrix-preset-btn px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all cursor-pointer">
               📌 Kiểm tra 15p (50 - 40 - 10 - 0)
             </button>
-            <button type="button" onclick="window.applyMatrixPreset(30, 30, 25, 15)" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs transition-colors">
+            <button type="button" onclick="window.applyMatrixPreset(30, 30, 25, 15, this)" class="matrix-preset-btn px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all cursor-pointer">
               📌 Thi Tuyển Sinh vào 10 (30 - 30 - 25 - 15)
             </button>
           </div>
@@ -397,26 +397,40 @@ export function createExamMatrixModal() {
 let activeSubject = "toan";
 let activeGrade = 9;
 
+function updateMatrixStatusText() {
+  const statusEl = document.getElementById("matrix-status-text");
+  if (!statusEl) return;
+  const qCount = parseInt(document.getElementById("matrix-question-count")?.value, 10) || 20;
+  const timeMin = parseInt(document.getElementById("matrix-time-select")?.value, 10) || 45;
+  const subNames = { toan: "Môn TOÁN", li: "Môn VẬT LÍ", hoa: "Môn HÓA", anh: "Môn ANH", tin: "TIN HỌC" };
+  const gradeNames = { 6: "Khối 6", 7: "Khối 7", 8: "Khối 8", 9: "Khối 9 & Tuyển sinh 10" };
+  statusEl.textContent = `${subNames[activeSubject] || "Toán"} • ${gradeNames[activeGrade] || "Khối 9"} • ${qCount} câu • ${timeMin} phút • Tự động xáo đề`;
+}
+
 function setupMatrixPillEvents() {
   const subBtns = document.querySelectorAll(".matrix-sub-btn");
   subBtns.forEach(btn => {
+    btn.classList.add("cursor-pointer");
     btn.addEventListener("click", () => {
       subBtns.forEach(b => {
-        b.className = "matrix-sub-btn p-2.5 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all";
+        b.className = "matrix-sub-btn p-2.5 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer";
       });
-      btn.className = "matrix-sub-btn p-2.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-black text-xs flex items-center justify-center gap-1.5 transition-all";
+      btn.className = "matrix-sub-btn p-2.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-black text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs";
       activeSubject = btn.getAttribute("data-subject");
+      updateMatrixStatusText();
     });
   });
 
   const gradeBtns = document.querySelectorAll(".matrix-grade-btn");
   gradeBtns.forEach(btn => {
+    btn.classList.add("cursor-pointer");
     btn.addEventListener("click", () => {
       gradeBtns.forEach(b => {
-        b.className = "matrix-grade-btn p-2.5 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-extrabold text-xs transition-all";
+        b.className = "matrix-grade-btn p-2.5 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-extrabold text-xs transition-all cursor-pointer";
       });
-      btn.className = "matrix-grade-btn p-2.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-black text-xs transition-all";
+      btn.className = "matrix-grade-btn p-2.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-black text-xs transition-all cursor-pointer shadow-xs";
       activeGrade = parseInt(btn.getAttribute("data-grade"), 10);
+      updateMatrixStatusText();
     });
   });
 
@@ -438,15 +452,24 @@ function setupMatrixPillEvents() {
     document.getElementById("th-count-preview").textContent = `${Math.round((th / 100) * qCount)} câu`;
     document.getElementById("vd-count-preview").textContent = `${Math.round((vd / 100) * qCount)} câu`;
     document.getElementById("vdc-count-preview").textContent = `${Math.round((vdc / 100) * qCount)} câu`;
+    updateMatrixStatusText();
   };
 
-  ["matrix-question-count", "mat-nb", "mat-th", "mat-vd", "mat-vdc"].forEach(id => {
+  ["matrix-question-count", "matrix-time-select", "mat-nb", "mat-th", "mat-vd", "mat-vdc"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener("input", updateCounts);
+    if (el) el.addEventListener("change", updateCounts);
   });
+
+  const modal = document.getElementById("exam-matrix-modal");
+  if (modal) {
+    modal.onclick = (e) => {
+      if (e.target === modal) window.closeExamMatrixModal();
+    };
+  }
 }
 
-window.applyMatrixPreset = function (nb, th, vd, vdc) {
+window.applyMatrixPreset = function (nb, th, vd, vdc, presetBtn) {
   document.getElementById("mat-nb").value = nb;
   document.getElementById("mat-th").value = th;
   document.getElementById("mat-vd").value = vd;
@@ -463,12 +486,32 @@ window.applyMatrixPreset = function (nb, th, vd, vdc) {
     totalEl.textContent = "Tổng: 100%";
     totalEl.className = "text-xs font-extrabold text-emerald-600";
   }
+
+  // Cập nhật trạng thái nút preset được click
+  document.querySelectorAll(".matrix-preset-btn").forEach(b => {
+    b.className = "matrix-preset-btn px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all cursor-pointer";
+  });
+  if (presetBtn) {
+    presetBtn.className = "matrix-preset-btn px-3 py-1.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-black text-xs shadow-xs transition-all cursor-pointer";
+  }
+
+  updateMatrixStatusText();
 };
 
-window.openExamMatrixModal = function () {
+window.openExamMatrixModal = function (preferredSubject, preferredGrade) {
   createExamMatrixModal();
   const modal = document.getElementById("exam-matrix-modal");
   const card = document.getElementById("exam-matrix-card");
+
+  if (preferredSubject) {
+    const subBtn = document.querySelector(`.matrix-sub-btn[data-subject="${preferredSubject}"]`);
+    if (subBtn) subBtn.click();
+  }
+  if (preferredGrade) {
+    const gradeBtn = document.querySelector(`.matrix-grade-btn[data-grade="${preferredGrade}"]`);
+    if (gradeBtn) gradeBtn.click();
+  }
+
   if (modal) {
     modal.classList.remove("hidden");
     requestAnimationFrame(() => {
@@ -548,9 +591,9 @@ export function openPrintPreviewModal(examData) {
           <button 
             type="button" 
             onclick="document.getElementById('exam-print-preview-modal').remove()" 
-            class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer"
+            class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-rose-600 active:scale-95 text-white text-xs sm:text-sm font-extrabold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
           >
-            ✕ Đóng
+            <span>✕ Đóng Xem Trước</span>
           </button>
         </div>
       </div>
@@ -663,6 +706,10 @@ export function openPrintPreviewModal(examData) {
   `;
 
   document.body.appendChild(modal);
+
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.remove();
+  };
 
   // Render KaTeX cho toàn bộ đề thi vừa mở
   if (window.renderKatex) {

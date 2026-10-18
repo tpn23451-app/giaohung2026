@@ -1060,9 +1060,9 @@ function injectMultiSubjectHub() {
 
         <button 
           type="button" 
-          onclick="window.openExamMatrixModal()" 
+          onclick="window.openExamMatrixModal(window.currentActiveSubject || 'toan', 9)" 
           id="hub-btn-matrix"
-          class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs shadow-md shadow-orange-500/25 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer animate-pulse"
+          class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 active:scale-95 text-white font-black text-xs shadow-md shadow-orange-500/25 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer animate-pulse"
           title="Tạo Đề Thi Chuẩn Ma Trận GDPT 2018 (4 Mức Độ Nhận Thức) & Xuất Bản In / PDF"
         >
           <span>🎯</span>
@@ -1096,35 +1096,61 @@ function injectMultiSubjectHub() {
   }
 }
 
+// Biến lưu môn đang hoạt động
+window.currentActiveSubject = "toan";
+
 // Hàm kích hoạt lọc môn học theo tương tác người dùng
 window.selectSubjectPill = function (subjectKey) {
-  // Highlight nút được chọn
+  window.currentActiveSubject = subjectKey;
+
+  // Highlight nổi bật nút được chọn
   document.querySelectorAll(".subject-hub-btn").forEach(btn => {
-    btn.classList.remove("ring-4", "ring-white/40");
+    btn.classList.remove("ring-4", "ring-amber-400", "scale-105", "shadow-xl");
   });
   const currentBtn = document.getElementById(`hub-btn-${subjectKey}`);
-  if (currentBtn) currentBtn.classList.add("ring-4", "ring-white/40");
+  if (currentBtn) {
+    currentBtn.classList.add("ring-4", "ring-amber-400", "scale-105", "shadow-xl");
+  }
+
+  // Hàm cuộn mượt đến danh sách chuyên đề để người dùng nhìn thấy bài học ngay lập tức
+  const scrollToLessons = () => {
+    const target = document.querySelector(".grid.grid-cols-1.md\\:grid-cols-2") || 
+                   document.querySelector("input[placeholder*='Tìm bài']")?.closest("div") ||
+                   document.querySelector("h2");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   if (subjectKey === "dacbiet") {
     // Cuộn đến phần đề đặc biệt 5 - 8 - 9
     const banner = document.querySelector(".bg-gradient-to-r.from-indigo-900") || document.querySelector("h3");
     if (banner) {
       banner.scrollIntoView({ behavior: "smooth", block: "center" });
-      showToast("Đã cuộn đến chuyên đề ôn tập trọng điểm 5, 8, 9!", "info");
+      showToast("⭐ Đã cuộn đến chuyên đề ôn tập trọng điểm 5, 8, 9!", "info");
     }
+    return;
+  }
+
+  if (subjectKey === "tin") {
+    // Chuyển về môn Tin học
+    const allBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent && b.textContent.trim() === "Tất cả");
+    if (allBtn) allBtn.click();
+    scrollToLessons();
+    showToast("💻 Đã chuyển sang Môn TIN HỌC (SGK 3-9)!", "info");
     return;
   }
 
   // 1. Chuyển sang cấp THCS nếu chọn Toán, Lí, Hóa, Anh
   const thcsBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent && b.textContent.includes("CẤP THCS"));
-  if (thcsBtn && subjectKey !== "tin") {
+  if (thcsBtn) {
     thcsBtn.click();
   }
 
   setTimeout(() => {
     // 2. Chọn Khối 8 hoặc Khối 9 cho các môn
     const gradeButtons = Array.from(document.querySelectorAll("button")).filter(b => b.textContent && (b.textContent.trim() === "Khối 8" || b.textContent.trim() === "Khối 9"));
-    if (gradeButtons.length > 0 && subjectKey !== "tin") {
+    if (gradeButtons.length > 0) {
       gradeButtons[0].click(); // Chọn Khối 8
     }
 
@@ -1138,10 +1164,9 @@ window.selectSubjectPill = function (subjectKey) {
       const subjectFilterBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent && b.textContent.trim() === targetLabel);
       if (subjectFilterBtn) {
         subjectFilterBtn.click();
-        showToast(`Đã chuyển sang ${targetLabel}!`, "success");
-      } else {
-        showToast(`Đã chọn môn ${targetLabel}. Hãy chọn bài học bên dưới!`, "info");
       }
+      scrollToLessons();
+      showToast(`✨ Đã hiển thị các chuyên đề ${targetLabel}!`, "success");
     }, 150);
   }, 100);
 };
